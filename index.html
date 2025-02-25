@@ -385,6 +385,42 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const mobileMenuIcon = document.querySelector('.mobile-menu-icon');
+            const navRight = document.querySelector('.nav-right');
+            const menuIcon = document.querySelector('.menu-icon');
+
+            if (mobileMenuIcon && navRight && menuIcon) {
+                mobileMenuIcon.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    navRight.classList.toggle('active');
+                    
+                    // Toggle menu icon
+                    if (navRight.classList.contains('active')) {
+                        menuIcon.src = 'assets/images/dropdownclose.png';
+                    } else {
+                        menuIcon.src = 'assets/images/dropdownopen.png';
+                    }
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!navRight.contains(e.target) && !mobileMenuIcon.contains(e.target)) {
+                        navRight.classList.remove('active');
+                        menuIcon.src = 'assets/images/dropdownopen.png';
+                    }
+                });
+
+                // Close menu when clicking a nav link
+                const navLinks = document.querySelectorAll('.nav-links a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        navRight.classList.remove('active');
+                        menuIcon.src = 'assets/images/dropdownopen.png';
+                    });
+                });
+            }
+
             const wrapper = document.querySelector('.gallery-wrapper');
             const track = document.querySelector('.gallery-track');
             const slides = document.querySelectorAll('.gallery-slide');
@@ -608,117 +644,44 @@
                     }
                 });
             }
+        });
 
-            // Social Icons Toggle
-            const socialToggle = document.querySelector('.social-toggle');
-            const socialMenu = document.querySelector('.social-menu');
+        document.addEventListener('DOMContentLoaded', function() {
+        const socialToggle = document.querySelector('.social-toggle');
+        const socialMenu = document.querySelector('.social-menu');
+        const socialMenuIcon = document.querySelector('.social-menu-icon');
+        let isOpen = false;
 
-            if (socialToggle && socialMenu) {
-                socialToggle.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    socialMenu.classList.toggle('active');
-                    this.classList.toggle('active');
-                });
+        function toggleSocialMenu(e) {
+            e.stopPropagation();
+            isOpen = !isOpen;
+            socialMenu.classList.toggle('active');
+            socialMenuIcon.style.transform = isOpen ? 'rotate(45deg)' : 'rotate(0)';
+        }
 
-                // Close when clicking outside
-                document.addEventListener('click', function(e) {
-                    if (!e.target.closest('.fixed-social-icons')) {
-                        socialMenu.classList.remove('active');
-                        socialToggle.classList.remove('active');
-                    }
-                });
+        // Toggle menu when clicking the toggle button
+        socialToggle.addEventListener('click', toggleSocialMenu);
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const socialIcons = document.querySelector('.fixed-social-icons');
+            if (!socialIcons.contains(e.target) && isOpen) {
+                isOpen = false;
+                socialMenu.classList.remove('active');
+                socialMenuIcon.style.transform = 'rotate(0)';
             }
         });
 
-
-    // Testimonial Slider
-    document.addEventListener('DOMContentLoaded', function() {
-        const slides = document.querySelectorAll('.testimonial-slide');
-        const dots = document.querySelectorAll('.testimonial-dot');
-        let currentSlide = 0;
-
-        function showSlide(index) {
-            // Hide all slides
-            slides.forEach(slide => {
-                slide.classList.remove('active');
-                slide.style.opacity = 0;
-            });
-
-            // Remove active class from all dots
-            dots.forEach(dot => {
-                dot.classList.remove('active');
-            });
-
-            // Show the selected slide
-            slides[index].classList.add('active');
-            slides[index].style.opacity = 1;
-
-            // Add active class to the corresponding dot
-            dots[index].classList.add('active');
-        }
-
-        // Add click event listeners to dots
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentSlide = index;
-                showSlide(currentSlide);
-            });
+        // Close menu when scrolling
+        window.addEventListener('scroll', function() {
+            if (isOpen) {
+                isOpen = false;
+                socialMenu.classList.remove('active');
+                socialMenuIcon.style.transform = 'rotate(0)';
+            }
         });
-
-        // Auto-advance slides every 5 seconds
-        setInterval(() => {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-        }, 5000);
-
-        // Show first slide initially
-        showSlide(0);
     });
-
-        // Testimonial Slider
-        document.addEventListener('DOMContentLoaded', function() {
-        const slides = document.querySelectorAll('.testimonial-slide');
-        const dots = document.querySelectorAll('.testimonial-dot');
-        let currentSlide = 0;
-
-        function showSlide(index) {
-            // Hide all slides
-            slides.forEach(slide => {
-                slide.classList.remove('active');
-                slide.style.opacity = 0;
-            });
-
-            // Remove active class from all dots
-            dots.forEach(dot => {
-                dot.classList.remove('active');
-            });
-
-            // Show the selected slide
-            slides[index].classList.add('active');
-            slides[index].style.opacity = 1;
-
-            // Add active class to the corresponding dot
-            dots[index].classList.add('active');
-        }
-
-        // Add click event listeners to dots
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                currentSlide = index;
-                showSlide(currentSlide);
-            });
-        });
-
-        // Auto-advance slides every 5 seconds
-        setInterval(() => {
-            currentSlide = (currentSlide + 1) % slides.length;
-            showSlide(currentSlide);
-        }, 5000);
-
-        // Show first slide initially
-        showSlide(0);
-    });
-
+    
     </script>
 
 </body>
