@@ -19,15 +19,15 @@
         <div class="video-text">Luxury Surf Bali</div>
     </div>
 
-     <!-- Header -->
-     <header class="header">
+    <!-- Header -->
+    <header class="header">
         <nav class="nav-container">
-            <div class="mobile-menu-icon">
-                <i class="fas fa-bars"></i>
-            </div>
             <div class="logo-container">
                 <img src="assets/images/logo.png" alt="Luxury Surf Bali Logo" class="logo-img">
                 <div class="logo">Luxury Surf Bali</div>
+            </div>
+            <div class="mobile-menu-icon">
+                <img src="assets/images/dropdownopen.png" alt="Menu" class="menu-icon">
             </div>
             <div class="nav-right">
                 <ul class="nav-links">
@@ -40,6 +40,7 @@
                 </ul>
                 <a href="https://wa.me/+6281287257961" class="book-now">Book Now</a>
             </div>
+            
         </nav>
     </header>
 
@@ -363,20 +364,23 @@
     </footer>
 
     <div class="fixed-social-icons">
-        <a href="https://wa.me/+6281287257961" class="social-icon whatsapp" target="_blank">
-            <i class="fab fa-whatsapp"></i>
-        </a>
-        <a href="https://instagram.com/luxury_surflesson" class="social-icon instagram" target="_blank">
-            <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://www.airbnb.com" class="social-icon airbnb" target="_blank">
-            <img src="assets/images/airbnb.png" alt="Airbnb Icon" style="width: 24px; height: 24px;">
-        </a>
-
-        <a href="https://www.klook.com" class="social-icon klook" target="_blank">
-            <img src="assets/images/klook.png" alt="Klook Icon" style="width: 35px; height: 35px;">
-        </a>
-
+        <div class="social-toggle">
+            <img src="assets/images/social.png" alt="Social Menu" class="social-menu-icon">
+        </div>
+        <div class="social-menu">
+            <a href="https://wa.me/+6281287257961" class="social-icon whatsapp" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="https://instagram.com/luxury_surflesson" class="social-icon instagram" target="_blank">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.airbnb.com" class="social-icon airbnb" target="_blank">
+                <img src="assets/images/airbnb.png" alt="Airbnb Icon" style="width: 24px; height: 24px;">
+            </a>
+            <a href="https://www.klook.com" class="social-icon klook" target="_blank">
+                <img src="assets/images/klook.png" alt="Klook Icon" style="width: 35px; height: 35px;">
+            </a>
+        </div>
     </div>
 
     <script>
@@ -387,216 +391,334 @@
             const nextButton = document.querySelector('.gallery-arrow.next');
             const prevButton = document.querySelector('.gallery-arrow.prev');
             
-            const slideCount = 9; // Number of original slides
-            let currentIndex = 0;
-            const slideWidth = (window.innerWidth - 40) / 3; // Account for gaps
-            let isDragging = false;
-            let startPos = 0;
-            let currentTranslate = 0;
-            let prevTranslate = 0;
-            let animationID = 0;
-            let dragStartTime = 0;
-            let dragDistance = 0;
-
-            // Set initial width for slides
-            slides.forEach(slide => {
-                slide.style.width = `${slideWidth}px`;
-            });
+            // Mobile check
+            const isMobile = window.innerWidth <= 768;
             
-            function updateSlidePosition(transition = true) {
-                cancelAnimationFrame(animationID);
-                if (!transition) {
-                    track.style.transition = 'none';
-                } else {
-                    track.style.transition = 'transform 0.3s ease';
+            if (isMobile) {
+                // Mobile Gallery Implementation
+                const slideCount = slides.length;
+                let currentIndex = 0;
+                
+                // Clone first and last slides for infinite loop
+                const firstSlideClone = slides[0].cloneNode(true);
+                const lastSlideClone = slides[slideCount - 1].cloneNode(true);
+                track.appendChild(firstSlideClone);
+                track.insertBefore(lastSlideClone, slides[0]);
+        
+                // Set initial width for mobile
+                slides.forEach(slide => {
+                    slide.style.minWidth = '100%';
+                    slide.style.width = '100%';
+                });
+        
+                function updateSlidePosition(index, animate = true) {
+                    if (!animate) {
+                        track.style.transition = 'none';
+                    } else {
+                        track.style.transition = 'transform 0.3s ease';
+                    }
+                    track.style.transform = `translateX(-${(index + 1) * 100}%)`;
                 }
-                currentTranslate = -currentIndex * (slideWidth + 20); // Add gap width
-                prevTranslate = currentTranslate;
-                setSliderPosition();
-            }
-
-            function setSliderPosition() {
-                track.style.transform = `translate3d(${currentTranslate}px, 0, 0)`;
-            }
-
-            function resetSlidePosition() {
-                if (currentIndex >= slideCount) {
-                    currentIndex = 0;
-                    updateSlidePosition(false);
-                } else if (currentIndex < 0) {
-                    currentIndex = slideCount - 1;
-                    updateSlidePosition(false);
-                }
-            }
-            
-            function animation() {
-                setSliderPosition();
-                if (isDragging) animationID = requestAnimationFrame(animation);
-            }
-            
-            function dragStart(e) {
-                e.preventDefault();
-                startPos = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
-                isDragging = true;
-                dragStartTime = Date.now();
-                dragDistance = 0;
-                track.style.transition = 'none';
-                animationID = requestAnimationFrame(animation);
-            }
-
-            function drag(e) {
-                if (!isDragging) return;
-                
-                e.preventDefault();
-                const currentPosition = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
-                dragDistance = currentPosition - startPos;
-                currentTranslate = prevTranslate + dragDistance;
-            }
-
-            function dragEnd(e) {
-                if (!isDragging) return;
-                
-                isDragging = false;
-                cancelAnimationFrame(animationID);
-                
-                const dragDuration = Date.now() - dragStartTime;
-                const velocity = Math.abs(dragDistance) / dragDuration;
-                const shouldSlide = Math.abs(dragDistance) > slideWidth * 0.2 || velocity > 0.5;
-                
-                track.style.transition = 'transform 0.3s ease';
-                
-                if (shouldSlide) {
-                    if (dragDistance < 0) {
+        
+                function moveToSlide(direction) {
+                    if (direction === 'next') {
                         currentIndex++;
+                        if (currentIndex >= slideCount) {
+                            updateSlidePosition(currentIndex);
+                            setTimeout(() => {
+                                currentIndex = 0;
+                                updateSlidePosition(currentIndex, false);
+                            }, 300);
+                        } else {
+                            updateSlidePosition(currentIndex);
+                        }
                     } else {
                         currentIndex--;
+                        if (currentIndex < 0) {
+                            updateSlidePosition(currentIndex);
+                            setTimeout(() => {
+                                currentIndex = slideCount - 1;
+                                updateSlidePosition(currentIndex, false);
+                            }, 300);
+                        } else {
+                            updateSlidePosition(currentIndex);
+                        }
+                    }
+                }
+        
+                // Set initial position
+                updateSlidePosition(currentIndex, false);
+        
+                // Touch events for mobile
+                let touchStartX = 0;
+                let touchEndX = 0;
+        
+                track.addEventListener('touchstart', e => {
+                    touchStartX = e.touches[0].clientX;
+                });
+        
+                track.addEventListener('touchend', e => {
+                    touchEndX = e.changedTouches[0].clientX;
+                    const diff = touchStartX - touchEndX;
+        
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) {
+                            moveToSlide('next');
+                        } else {
+                            moveToSlide('prev');
+                        }
+                    }
+                });
+        
+                // Arrow navigation
+                nextButton.addEventListener('click', () => moveToSlide('next'));
+                prevButton.addEventListener('click', () => moveToSlide('prev'));
+        
+            } else {
+                // Desktop Implementation
+                const slideCount = 9; // Number of original slides
+                let currentIndex = 0;
+                const slideWidth = (window.innerWidth - 40) / 3; // Account for gaps
+                let isDragging = false;
+                let startPos = 0;
+                let currentTranslate = 0;
+                let prevTranslate = 0;
+                let animationID = 0;
+                let dragStartTime = 0;
+                let dragDistance = 0;
+        
+                // Set initial width for slides
+                slides.forEach(slide => {
+                    slide.style.width = `${slideWidth}px`;
+                });
+                
+                function updateSlidePosition(transition = true) {
+                    cancelAnimationFrame(animationID);
+                    if (!transition) {
+                        track.style.transition = 'none';
+                    } else {
+                        track.style.transition = 'transform 0.3s ease';
+                    }
+                    currentTranslate = -currentIndex * (slideWidth + 20); // Add gap width
+                    prevTranslate = currentTranslate;
+                    setSliderPosition();
+                }
+        
+                function setSliderPosition() {
+                    track.style.transform = `translate3d(${currentTranslate}px, 0, 0)`;
+                }
+        
+                function resetSlidePosition() {
+                    if (currentIndex >= slideCount) {
+                        currentIndex = 0;
+                        updateSlidePosition(false);
+                    } else if (currentIndex < 0) {
+                        currentIndex = slideCount - 1;
+                        updateSlidePosition(false);
                     }
                 }
                 
-                updateSlidePosition();
-                setTimeout(resetSlidePosition, 300);
-            }
-            
-            // Event Listeners
-            wrapper.addEventListener('mousedown', dragStart);
-            wrapper.addEventListener('touchstart', dragStart, { passive: false });
-            wrapper.addEventListener('mouseup', dragEnd);
-            wrapper.addEventListener('touchend', dragEnd);
-            wrapper.addEventListener('mousemove', drag);
-            wrapper.addEventListener('touchmove', drag, { passive: false });
-            wrapper.addEventListener('mouseleave', dragEnd);
-            
-            nextButton.addEventListener('click', () => {
-                currentIndex++;
-                updateSlidePosition();
-                setTimeout(resetSlidePosition, 300);
-            });
-            
-            prevButton.addEventListener('click', () => {
-                currentIndex--;
-                updateSlidePosition();
-                setTimeout(resetSlidePosition, 300);
-            });
-
-            // Initial position
-            updateSlidePosition();
-
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                const newSlideWidth = (window.innerWidth - 40) / 3;
-                slides.forEach(slide => {
-                    slide.style.width = `${newSlideWidth}px`;
-                });
-                updateSlidePosition();
-            });
-
-            // Remove transition after it's done
-            track.addEventListener('transitionend', () => {
-                if (currentIndex >= slideCount || currentIndex < 0) {
+                function animation() {
+                    setSliderPosition();
+                    if (isDragging) animationID = requestAnimationFrame(animation);
+                }
+                
+                function dragStart(e) {
+                    e.preventDefault();
+                    startPos = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+                    isDragging = true;
+                    dragStartTime = Date.now();
+                    dragDistance = 0;
                     track.style.transition = 'none';
-                    currentIndex = currentIndex >= slideCount ? 0 : slideCount - 1;
-                    updateSlidePosition(false);
+                    animationID = requestAnimationFrame(animation);
                 }
-            });
-
-            // Navigation active state handler
-            const navLinks = document.querySelectorAll('.nav-links a');
-            
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
+        
+                function drag(e) {
+                    if (!isDragging) return;
+                    
+                    e.preventDefault();
+                    const currentPosition = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+                    dragDistance = currentPosition - startPos;
+                    currentTranslate = prevTranslate + dragDistance;
+                }
+        
+                function dragEnd(e) {
+                    if (!isDragging) return;
+                    
+                    isDragging = false;
+                    cancelAnimationFrame(animationID);
+                    
+                    const dragDuration = Date.now() - dragStartTime;
+                    const velocity = Math.abs(dragDistance) / dragDuration;
+                    const shouldSlide = Math.abs(dragDistance) > slideWidth * 0.2 || velocity > 0.5;
+                    
+                    track.style.transition = 'transform 0.3s ease';
+                    
+                    if (shouldSlide) {
+                        if (dragDistance < 0) {
+                            currentIndex++;
+                        } else {
+                            currentIndex--;
+                        }
+                    }
+                    
+                    updateSlidePosition();
+                    setTimeout(resetSlidePosition, 300);
+                }
+                
+                // Event Listeners for desktop
+                wrapper.addEventListener('mousedown', dragStart);
+                wrapper.addEventListener('touchstart', dragStart, { passive: false });
+                wrapper.addEventListener('mouseup', dragEnd);
+                wrapper.addEventListener('touchend', dragEnd);
+                wrapper.addEventListener('mousemove', drag);
+                wrapper.addEventListener('touchmove', drag, { passive: false });
+                wrapper.addEventListener('mouseleave', dragEnd);
+                
+                nextButton.addEventListener('click', () => {
+                    currentIndex++;
+                    updateSlidePosition();
+                    setTimeout(resetSlidePosition, 300);
                 });
-            });
-
-            // Testimonial slider
-            const testimonialSlides = document.querySelectorAll('.testimonial-slide');
-            const dots = document.querySelectorAll('.testimonial-dot');
-            let currentSlide = 0;
-
-            function showSlide(index) {
-                testimonialSlides.forEach(slide => slide.classList.remove('active'));
-                dots.forEach(dot => dot.classList.remove('active'));
-                testimonialSlides[index].classList.add('active');
-                dots[index].classList.add('active');
+                
+                prevButton.addEventListener('click', () => {
+                    currentIndex--;
+                    updateSlidePosition();
+                    setTimeout(resetSlidePosition, 300);
+                });
+        
+                // Initial position
+                updateSlidePosition();
+        
+                // Handle window resize
+                window.addEventListener('resize', () => {
+                    const newSlideWidth = (window.innerWidth - 40) / 3;
+                    slides.forEach(slide => {
+                        slide.style.width = `${newSlideWidth}px`;
+                    });
+                    updateSlidePosition();
+                });
+        
+                // Remove transition after it's done
+                track.addEventListener('transitionend', () => {
+                    if (currentIndex >= slideCount || currentIndex < 0) {
+                        track.style.transition = 'none';
+                        currentIndex = currentIndex >= slideCount ? 0 : slideCount - 1;
+                        updateSlidePosition(false);
+                    }
+                });
             }
 
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => {
-                    currentSlide = index;
-                    showSlide(currentSlide);
+            // Social Icons Toggle
+            const socialToggle = document.querySelector('.social-toggle');
+            const socialMenu = document.querySelector('.social-menu');
+
+            if (socialToggle && socialMenu) {
+                socialToggle.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    socialMenu.classList.toggle('active');
+                    this.classList.toggle('active');
                 });
+
+                // Close when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!e.target.closest('.fixed-social-icons')) {
+                        socialMenu.classList.remove('active');
+                        socialToggle.classList.remove('active');
+                    }
+                });
+            }
+        });
+
+
+    // Testimonial Slider
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.testimonial-slide');
+        const dots = document.querySelectorAll('.testimonial-dot');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            // Hide all slides
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+                slide.style.opacity = 0;
             });
 
-            // Auto slide
-            setInterval(() => {
-                currentSlide = (currentSlide + 1) % testimonialSlides.length;
+            // Remove active class from all dots
+            dots.forEach(dot => {
+                dot.classList.remove('active');
+            });
+
+            // Show the selected slide
+            slides[index].classList.add('active');
+            slides[index].style.opacity = 1;
+
+            // Add active class to the corresponding dot
+            dots[index].classList.add('active');
+        }
+
+        // Add click event listeners to dots
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
                 showSlide(currentSlide);
-            }, 5000);
+            });
         });
 
+        // Auto-advance slides every 5 seconds
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }, 5000);
+
+        // Show first slide initially
+        showSlide(0);
+    });
+
+        // Testimonial Slider
         document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuIcon = document.querySelector('.mobile-menu-icon');
-            const navRight = document.querySelector('.nav-right');
-            const navLinks = document.querySelectorAll('.nav-links a');
-            const icon = mobileMenuIcon.querySelector('i');
+        const slides = document.querySelectorAll('.testimonial-slide');
+        const dots = document.querySelectorAll('.testimonial-dot');
+        let currentSlide = 0;
 
-            // Toggle menu
-            mobileMenuIcon.addEventListener('click', function(e) {
-                e.stopPropagation();
-                navRight.classList.toggle('active');
-                if (icon.classList.contains('fa-bars')) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
+        function showSlide(index) {
+            // Hide all slides
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+                slide.style.opacity = 0;
             });
 
-            // Close menu when clicking a link
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    navRight.classList.remove('active');
-                    icon.classList.add('fa-bars');
-                    icon.classList.remove('fa-times');
-                });
+            // Remove active class from all dots
+            dots.forEach(dot => {
+                dot.classList.remove('active');
             });
 
-            // Close menu when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!navRight.contains(e.target) && !mobileMenuIcon.contains(e.target)) {
-                    navRight.classList.remove('active');
-                    icon.classList.add('fa-bars');
-                    icon.classList.remove('fa-times');
-                }
-            });
+            // Show the selected slide
+            slides[index].classList.add('active');
+            slides[index].style.opacity = 1;
 
-            // Prevent menu from closing when clicking inside it
-            navRight.addEventListener('click', function(e) {
-                e.stopPropagation();
+            // Add active class to the corresponding dot
+            dots[index].classList.add('active');
+        }
+
+        // Add click event listeners to dots
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                showSlide(currentSlide);
             });
         });
+
+        // Auto-advance slides every 5 seconds
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }, 5000);
+
+        // Show first slide initially
+        showSlide(0);
+    });
+
     </script>
 
 </body>
