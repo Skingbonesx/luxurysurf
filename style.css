@@ -48,7 +48,7 @@ body {
 @media (max-width: 768px) {
     .video-container {
         /* Atur ketinggian baru, misalnya 50vh */
-        height: 80vh;
+        height: 60vh;
         /* Terapkan scale untuk mengecilkan konten jika diperlukan */
         transform: scale(1);
         transform-origin: top center;
