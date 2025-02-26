@@ -9,6 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cabin+Sketch&family=Montserrat:wght@300;400;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+
 </head>
 <body>
     <!-- Video Background -->
@@ -16,7 +20,7 @@
         <video autoplay muted loop playsinline id="myVideo">
             <source src="assets/video/background.mp4" type="video/mp4">
         </video>
-        <div class="video-text">Luxury Surf Bali</div>
+        <div class="video-text">Luxury Surf</div>
     </div>
 
     <!-- Header -->
@@ -27,7 +31,7 @@
                 <div class="logo">Luxury Surf Bali</div>
             </div>
             <div class="mobile-menu-icon">
-                <img src="/assets/images/dropdownopen.png" alt="Menu" class="menu-icon">
+                <img src="assets/images/dropdownopen.png" alt="Menu" class="menu-icon">
             </div>
             <div class="nav-right">
                 <ul class="nav-links">
@@ -181,55 +185,61 @@
             </div>
         </section>
 
-        <!-- Testimonials Section -->
-        <section class="testimonials">
-            <h2>What Our Surfers Say</h2>
-            <div class="testimonials-container">
-                <div class="testimonial-image">
-                    <img src="assets/images/surf-testimonial.jpg" alt="Surfing Experience">
-                </div>
+<!-- Testimonials Section -->
+<section class="testimonials">
+    <div class="testimonials-container">
+        <div class="testimonial-content">
+            <div class="testimonial-image">
+                <img src="assets/images/surf-testimonial.jpg" alt="Surfing Experience">
+            </div>
+            <div class="testimonial-right">
+                <h2>What Our Surfers Say</h2>
                 <div class="testimonial-slider">
-                    <div class="testimonial-slide active">
-                        <div class="testimonial-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+                    <div class="testimonial-slides">
+                        <div class="testimonial-slide active">
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"An incredible experience! The instructors were patient and professional. I went from never surfing to catching waves in just three lessons."</p>
+                            <div class="testimonial-author">Sarah Johnson</div>
                         </div>
-                        <p class="testimonial-text">"An incredible experience! The instructors were patient and professional. I went from never surfing to catching waves in just three lessons."</p>
-                        <div class="testimonial-author">Sarah Johnson</div>
-                    </div>
-                    <div class="testimonial-slide">
-                        <div class="testimonial-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+                        <div class="testimonial-slide">
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"The best surf school in Bali! The step-by-step approach made learning easy and fun. The instructors are knowledgeable."</p>
+                            <div class="testimonial-author">Mike Thompson</div>
                         </div>
-                        <p class="testimonial-text">"The best surf school in Bali! The step-by-step approach made learning easy and fun. The instructors are knowledgeable."</p>
-                        <div class="testimonial-author">Mike Thompson</div>
-                    </div>
-                    <div class="testimonial-slide">
-                        <div class="testimonial-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+                        <div class="testimonial-slide">
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"My family had an amazing time learning to surf here. The instructors were great with our kids and made sure everyone was safe."</p>
+                            <div class="testimonial-author">Emma Davis</div>
                         </div>
-                        <p class="testimonial-text">"My family had an amazing time learning to surf here. The instructors were great with our kids and made sure everyone was safe."</p>
-                        <div class="testimonial-author">Emma Davis</div>
                     </div>
                     <div class="testimonial-controls">
-                        <button class="testimonial-dot active"></button>
-                        <button class="testimonial-dot"></button>
-                        <button class="testimonial-dot"></button>
+                        <button class="testimonial-dot active" data-index="0"></button>
+                        <button class="testimonial-dot" data-index="1"></button>
+                        <button class="testimonial-dot" data-index="2"></button>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
         <!-- Instagram Gallery Section -->
         <section class="instagram-gallery">
@@ -384,7 +394,38 @@
     </div>
 
     <script>
-       document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const dots = document.querySelectorAll('.testimonial-dot');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+        });
+        dots.forEach(dot => {
+            dot.classList.remove('active');
+        });
+
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+        currentSlide = index;
+    }
+
+    // Add click event listeners to dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            showSlide(index);
+        });
+    });
+
+    // Auto-advance slides every 5 seconds
+    setInterval(() => {
+        let nextSlide = (currentSlide + 1) % slides.length;
+        showSlide(nextSlide);
+    }, 5000);
+});
+        document.addEventListener('DOMContentLoaded', function() {
             // Mobile Menu Toggle
             const mobileMenuIcon = document.querySelector('.mobile-menu-icon');
             const navRight = document.querySelector('.nav-right');
@@ -420,7 +461,6 @@
                     });
                 });
             }
-
 
             const wrapper = document.querySelector('.gallery-wrapper');
             const track = document.querySelector('.gallery-track');
@@ -683,7 +723,6 @@
         });
     });
     
-
     </script>
 
 </body>
