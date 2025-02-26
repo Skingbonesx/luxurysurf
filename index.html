@@ -394,6 +394,66 @@
     </div>
 
     <script>
+
+        // Gallery Slider with Touch Support
+document.addEventListener('DOMContentLoaded', function() {
+    const gallery = document.querySelector('.gallery-wrapper');
+    const track = document.querySelector('.gallery-track');
+    let startX;
+    let scrollLeft;
+    let isDown;
+    let walkX;
+
+    // Touch Events
+    gallery.addEventListener('touchstart', (e) => {
+        isDown = true;
+        startX = e.touches[0].pageX - gallery.offsetLeft;
+        scrollLeft = track.scrollLeft;
+        walkX = 0;
+    });
+
+    gallery.addEventListener('touchend', () => {
+        isDown = false;
+        // Snap to nearest slide based on walkX
+        if (Math.abs(walkX) > 50) {
+            const direction = walkX > 0 ? -1 : 1;
+            const slideWidth = gallery.querySelector('.gallery-slide').offsetWidth + 20; // Including gap
+            track.style.transform = `translateX(${scrollLeft + (direction * slideWidth)}px)`;
+        }
+    });
+
+    gallery.addEventListener('touchmove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.touches[0].pageX - gallery.offsetLeft;
+        walkX = (x - startX);
+        track.style.transform = `translateX(${scrollLeft + walkX}px)`;
+    });
+
+    // Mouse Events (for desktop)
+    gallery.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - gallery.offsetLeft;
+        scrollLeft = track.scrollLeft;
+        walkX = 0;
+    });
+
+    gallery.addEventListener('mouseleave', () => {
+        isDown = false;
+    });
+
+    gallery.addEventListener('mouseup', () => {
+        isDown = false;
+    });
+
+    gallery.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - gallery.offsetLeft;
+        walkX = (x - startX);
+        track.style.transform = `translateX(${scrollLeft + walkX}px)`;
+    });
+});
         document.addEventListener('DOMContentLoaded', function() {
     const slides = document.querySelectorAll('.testimonial-slide');
     const dots = document.querySelectorAll('.testimonial-dot');
