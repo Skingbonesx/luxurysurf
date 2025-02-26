@@ -38,12 +38,13 @@ body {
     position: absolute;
     bottom: 2rem;
     right: 2rem;
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Cabin Sketch', cursive;
     font-size: 3rem;
     color: #ffffff;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     z-index: 2;
 }
+
 
 /* Header Styles */
 .header {
@@ -80,7 +81,7 @@ body {
 }
 
 .logo {
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Cabin Sketch', cursive;
     font-size: 2rem;
     font-weight: bold;
     color: #ffffff;
@@ -120,7 +121,10 @@ body {
 
 .nav-links a.active {
     font-weight: 600;
-    color: #ff6b00;
+    color: #ffffff;
+    background-color: #ff6b00;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
 }
 
 .nav-links a.active::before {
@@ -141,13 +145,17 @@ body {
 }
 
 .nav-links a:hover {
-    color: #ff6b00;
+    color: #ffffff;
     text-shadow: 0 0 10px rgba(139, 69, 19, 0.3);
 }
 
-.nav-links a:hover::before {
-    transform: scaleX(1);
-    transform-origin: left;
+.nav-links a.active::before {
+    display: none;
+}
+
+.nav-links a:not(.active):hover {
+    color: #ff6b00;
+    text-shadow: 0 0 10px rgba(139, 69, 19, 0.3);
 }
 
 /* Book Now Button */
@@ -155,7 +163,7 @@ body {
     padding: 0.5rem 1.5rem;
     font-size: 1rem;
     font-weight: bold;
-    background: linear-gradient(45deg, #3498db, #2ecc71);
+    background: linear-gradient(45deg, #ff6b00, #ff8533);
     color: white;
     border: none;
     border-radius: 25px;
@@ -166,8 +174,8 @@ body {
 
 .book-now:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
-}
+    box-shadow: 0 5px 15px rgba(255, 107, 0, 0.4);
+} 
 
 /* Page Content Styles */
 .page-content {
@@ -868,19 +876,17 @@ body {
 }
 
 .card-icon {
-    width: 60px;
-    height: 60px;
-    background: #8B4513;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
+    font-size: 2.5rem;
+    color: #000;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
 }
 
 .card-icon i {
-    font-size: 24px;
-    color: white;
+    font-size: px;
+    color: rgb(0, 0, 0);
 }
 
 .contact-card h3 {
@@ -1034,7 +1040,7 @@ body {
 }
 
 .welcome h2 {
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Cabin Sketch', cursive;
     font-size: 4rem;
     margin-bottom: 1rem;
     color: #333;
@@ -1044,22 +1050,74 @@ body {
     color: #ff6b00;
 }
 
+/* Sub Judul */
 .welcome-subtitle {
     margin-bottom: 2rem;
 }
 
 .welcome-subtitle p {
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.8rem;
     color: #666;
     font-weight: 300;
 }
 
+/* Deskripsi */
 .welcome-content p {
+    font-family: 'Open Sans', sans-serif;
     font-size: 1.2rem;
     color: #666;
     max-width: none;
     margin: 0 auto;
     padding: 0 4rem;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+    .welcome {
+        padding: 3rem 1.5rem;
+        margin: 75vh auto 0;
+    }
+
+    .welcome h2 {
+        font-size: 2.8rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .welcome-subtitle {
+        margin-bottom: 1.5rem;
+    }
+
+    .welcome-subtitle p {
+        font-size: 1.4rem;
+    }
+
+    .welcome-content p {
+        font-size: 1rem;
+        padding: 0 1.5rem;
+        line-height: 1.6;
+    }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 480px) {
+    .welcome {
+        padding: 2.5rem 1rem;
+    }
+
+    .welcome h2 {
+        font-size: 2.2rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .welcome-subtitle p {
+        font-size: 1.2rem;
+    }
+
+    .welcome-content p {
+        font-size: 0.95rem;
+        padding: 0 0.5rem;
+    }
 }
 
 /* Service Cards Styles */
@@ -1251,12 +1309,13 @@ body {
 /* Gallery Description Styles */
 .gallery-description {
     width: 100%;
-    padding: 3rem 4rem;
+    padding: 1rem 2rem;
     text-align: center;
     background: #FFF8E7;
 }
 
 .gallery-description p {
+    font-family: 'Open Sans', sans-serif;
     font-size: 1.1rem;
     color: #666;
     line-height: 1.8;
@@ -1270,14 +1329,16 @@ body {
     background: #FFF8E7;
     max-width: 1800px;
     margin: 0 auto;
+    
 }
 
 .lesson-steps h2 {
     text-align: center;
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Cabin Sketch', cursive;
     font-size: 3.5rem;
-    color: #333;
-    margin-bottom: 4rem;
+    color: #000000;
+    margin-bottom: 8rem;
+    
 }
 
 .lesson-step {
@@ -1288,10 +1349,14 @@ body {
     opacity: 0;
     transform: translateY(30px);
     animation: fadeInUp 0.8s ease forwards;
+    font-family: 'Open Sans', sans-serif;
+
+    
 }
 
 .lesson-step:last-child {
     margin-bottom: 0;
+    
 }
 
 .lesson-step.reverse {
@@ -1329,7 +1394,7 @@ body {
 }
 
 .lesson-content h3 {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 2rem;
     color: #8B4513;
     margin-bottom: 1.5rem;
@@ -1441,28 +1506,22 @@ body {
 /* Testimonials Section */
 .testimonials {
     padding: 6rem 2rem;
-    background: #333333;
     position: relative;
-}
-
-.testimonials h2 {
-    text-align: center;
-    font-family: 'Dancing Script', cursive;
-    font-size: 3.5rem;
-    color: #ffffff;
-    margin-bottom: 4rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .testimonials-container {
     max-width: 1400px;
-    margin: 2rem auto 0;
+    margin: 0 auto;
+}
+
+.testimonial-content {
     display: flex;
-    align-items: center;
-    background: #4e4233;
+    align-items: stretch;
+    background: #424140;
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     height: 600px;
+    overflow: hidden;
 }
 
 .testimonial-image {
@@ -1478,24 +1537,49 @@ body {
     object-fit: cover;
 }
 
-.testimonial-slider {
+.testimonial-right {
     flex: 1;
-    width: 80%;
-    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-right h2 {
+    text-align: center;
+    font-family: 'Cabin Sketch', cursive;
+    font-size: 3.8rem;
+    color: #ffffff;
+    margin-top: 2rem;
+    margin-bottom: 5rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.testimonial-slider {
     background: #ffffff;
     padding: 2rem;
     border-radius: 15px;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    margin: 2rem;
-    height: auto;
+    position: relative;
+    max-height: 275px; /* Batas maksimal tinggi kotak */
+}
+
+
+.testimonial-slides {
+    flex: 1;
+    position: relative;
 }
 
 .testimonial-slide {
     display: none;
     opacity: 0;
     transition: opacity 0.5s ease;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 1rem;
 }
 
 .testimonial-slide.active {
@@ -1510,6 +1594,7 @@ body {
 .testimonial-rating i {
     color: #FFD700;
     margin-right: 0.3rem;
+    margin-top: 3rem;
 }
 
 .testimonial-text {
@@ -1531,7 +1616,8 @@ body {
     display: flex;
     justify-content: center;
     gap: 1rem;
-    margin-top: 2rem;
+    margin-top: auto;
+    padding-top: 2rem;
 }
 
 .testimonial-dot {
@@ -1553,39 +1639,41 @@ body {
 @media (max-width: 768px) {
     .testimonials {
         padding: 3rem 1rem;
-        background: #333333;
     }
 
-    .testimonials-container {
+    .testimonial-content {
         flex-direction: column;
         height: auto;
-        margin-top: 3rem;
-        background: #ffffff;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .testimonials h2 {
-        font-size: 2.5rem;
-        margin-bottom: 0;
-        color: #ffffff;
-        position: relative;
-        z-index: 1;
     }
 
     .testimonial-image {
         width: 100%;
         height: 300px;
         border-radius: 15px 15px 0 0;
-        margin-bottom: 0;
+    }
+
+    .testimonial-right {
+        width: 100%;
+        padding: 1.5rem;
+    }
+
+    .testimonial-right h2 {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        color: #ffffff;
     }
 
     .testimonial-slider {
-        width: 100%;
-        margin: 0;
         padding: 1.5rem;
-        background: white;
-        border-radius: 0 0 15px 15px;
-        box-shadow: none;
+        margin: 0;
+    }
+
+    .testimonial-slide {
+        position: relative;
+        top: 0;
+        transform: none;
+        padding: 0;
+        margin-bottom: 1.5rem;
     }
 
     .testimonial-text {
@@ -1598,7 +1686,7 @@ body {
     }
 
     .testimonial-controls {
-        margin-top: 1.5rem;
+        padding-top: 1rem;
     }
 
     .testimonial-dot {
@@ -1613,12 +1701,16 @@ body {
         padding: 2rem 1rem;
     }
 
-    .testimonials h2 {
-        font-size: 2rem;
-    }
-
     .testimonial-image {
         height: 250px;
+    }
+
+    .testimonial-right {
+        padding: 1rem;
+    }
+
+    .testimonial-right h2 {
+        font-size: 2rem;
     }
 
     .testimonial-slider {
@@ -1633,6 +1725,7 @@ body {
         font-size: 1rem;
     }
 }
+
 /* Instagram Gallery Section */
 .instagram-gallery {
     padding: 6rem 2rem;
@@ -1641,7 +1734,7 @@ body {
 
 .instagram-gallery h2 {
     text-align: center;
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Cabin Sketch', cursive;
     font-size: 3.5rem;
     color: #333;
     margin-bottom: 1rem;
