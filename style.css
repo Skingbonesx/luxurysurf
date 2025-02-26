@@ -48,7 +48,7 @@ body {
 @media (max-width: 768px) {
     .video-container {
         /* Atur ketinggian baru, misalnya 50vh */
-        height: 60vh;
+        height: 65vh;
         /* Terapkan scale untuk mengecilkan konten jika diperlukan */
         transform: scale(1);
         transform-origin: top center;
@@ -1092,7 +1092,7 @@ body {
     .welcome h2 {
         font-size: 2.8rem;
         margin-bottom: 0.8rem;
-        margin-top: -8rem;
+        margin-top: -6rem;
     }
 
     .welcome-subtitle {
