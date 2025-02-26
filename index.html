@@ -407,7 +407,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let prevTranslate = 0;
     let isDragging = false;
     let currentIndex = 0;
-    let lastDirection = 0; // -1 for left, 1 for right
+    let startTime;
+    let isAnimating = false;
     
     // Clone first and last slides for infinite effect
     const firstSlideClone = slides[0].cloneNode(true);
@@ -415,13 +416,9 @@ document.addEventListener('DOMContentLoaded', function() {
     track.appendChild(firstSlideClone);
     track.insertBefore(lastSlideClone, slides[0]);
 
-    // Get slide width including gap
+    // Get slide width
     function getSlideWidth() {
-        const slide = slides[0];
-        const style = window.getComputedStyle(slide);
-        const width = slide.offsetWidth;
-        const gap = parseInt(style.marginRight) || 20;
-        return width + gap;
+        return window.innerWidth;
     }
 
     // Initialize position
@@ -439,82 +436,102 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle infinite loop transition
     function handleInfiniteLoop() {
+        if (isAnimating) return;
+        
         const slideWidth = getSlideWidth();
         
-        if (currentIndex === slideCount) {
-            // If we're at the cloned first slide
+        if (currentIndex >= slideCount) {
+            isAnimating = true;
             currentIndex = 0;
             track.style.transition = 'none';
             currentTranslate = -slideWidth;
             prevTranslate = currentTranslate;
             setSliderPosition();
-        } else if (currentIndex === -1) {
-            // If we're at the cloned last slide
+            
+            // Force reflow
+            track.offsetHeight;
+            
+            isAnimating = false;
+        } else if (currentIndex < 0) {
+            isAnimating = true;
             currentIndex = slideCount - 1;
             track.style.transition = 'none';
             currentTranslate = -(slideWidth * slideCount);
             prevTranslate = currentTranslate;
             setSliderPosition();
+            
+            // Force reflow
+            track.offsetHeight;
+            
+            isAnimating = false;
         }
     }
 
     // Slide to index with animation
-    function slideToIndex(index, animate = true) {
+    function slideToIndex(index) {
+        if (isAnimating) return;
+        
         const slideWidth = getSlideWidth();
         currentIndex = index;
         currentTranslate = -((currentIndex + 1) * slideWidth);
         prevTranslate = currentTranslate;
         
-        track.style.transition = animate ? 'transform 0.3s ease-out' : 'none';
+        track.style.transition = 'transform 0.3s ease-out';
         setSliderPosition();
         
-        if (animate) {
-            setTimeout(() => {
-                handleInfiniteLoop();
-            }, 300);
-        }
+        setTimeout(() => {
+            handleInfiniteLoop();
+        }, 300);
     }
 
     // Handle touch/mouse start
     function handleStart(event) {
+        if (isAnimating) return;
+        
         startX = event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+        startTime = new Date().getTime();
         isDragging = true;
         track.style.transition = 'none';
     }
 
     // Handle touch/mouse move
     function handleMove(event) {
-        if (!isDragging) return;
+        if (!isDragging || isAnimating) return;
         
         const currentX = event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
         const diff = currentX - startX;
         currentTranslate = prevTranslate + diff;
         setSliderPosition();
-        
-        // Determine direction
-        lastDirection = diff > 0 ? -1 : 1;
     }
 
     // Handle touch/mouse end
     function handleEnd() {
-        if (!isDragging) return;
+        if (!isDragging || isAnimating) return;
         isDragging = false;
         
-        const slideWidth = getSlideWidth();
-        const moveRatio = (prevTranslate - currentTranslate) / slideWidth;
+        const endTime = new Date().getTime();
+        const timeElapsed = endTime - startTime;
         
-        if (Math.abs(moveRatio) > 0.2) {
-            currentIndex += lastDirection;
+        const slideWidth = getSlideWidth();
+        const diff = currentTranslate - prevTranslate;
+        const direction = Math.sign(-diff);
+        
+        // Calculate velocity (pixels per millisecond)
+        const velocity = Math.abs(diff) / timeElapsed;
+        
+        // If swipe was fast enough or moved more than 40% of slide width
+        if (velocity > 0.5 || Math.abs(diff) > slideWidth * 0.4) {
+            currentIndex += direction;
         }
         
         slideToIndex(currentIndex);
     }
 
     // Event Listeners
-    gallery.addEventListener('touchstart', handleStart);
+    gallery.addEventListener('touchstart', handleStart, { passive: true });
     gallery.addEventListener('mousedown', handleStart);
     
-    gallery.addEventListener('touchmove', handleMove);
+    gallery.addEventListener('touchmove', handleMove, { passive: true });
     gallery.addEventListener('mousemove', handleMove);
     
     gallery.addEventListener('touchend', handleEnd);
@@ -531,10 +548,15 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSlider();
 
     // Handle window resize
+    let resizeTimeout;
     window.addEventListener('resize', () => {
-        slideToIndex(currentIndex, false);
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            slideToIndex(currentIndex);
+        }, 100);
     });
 });
+
     //testimonial script
         document.addEventListener('DOMContentLoaded', function() {
     const slides = document.querySelectorAll('.testimonial-slide');
