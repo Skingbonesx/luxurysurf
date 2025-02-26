@@ -1117,6 +1117,8 @@ body {
     .welcome-content p {
         font-size: 0.95rem;
         padding: 0 0.5rem;
+
+
     }
 }
 
@@ -1186,6 +1188,7 @@ body {
     position: relative;
     z-index: 2;
 }
+
 
 /* Gallery Section */
 .gallery {
@@ -1355,18 +1358,31 @@ body {
     .gallery-description p {
         font-size: 0.95rem;
         padding: 0 0.5rem;
+        margin-bottom: -80px; /* Sesuaikan nilainya sesuai kebutuhan */
+        margin-top: 30px; /* Sesuaikan nilainya sesuai kebutuhan */
     }
+
+    .gallery {
+        margin-top: -50px; /* Sesuaikan nilainya sesuai kebutuhan */
+    }
+    
+
 }
 
 /* Small Mobile Devices */
 @media (max-width: 480px) {
     .gallery-slide img {
         height: 250px;
+        
     }
 
     .gallery-arrow {
         width: 35px;
         height: 35px;
+    }
+
+    .gallery {
+        margin-top: -50px; /* Sesuaikan nilainya sesuai kebutuhan */
     }
 }
 
