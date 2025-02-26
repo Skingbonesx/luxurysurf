@@ -395,65 +395,166 @@
 
     <script>
 
-        // Gallery Slider with Touch Support
+// Gallery Slider with Touch Support
 document.addEventListener('DOMContentLoaded', function() {
     const gallery = document.querySelector('.gallery-wrapper');
     const track = document.querySelector('.gallery-track');
+    const slides = document.querySelectorAll('.gallery-slide');
     let startX;
-    let scrollLeft;
-    let isDown;
-    let walkX;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let isDragging = false;
+    let animationID;
+    let currentIndex = 0;
 
-    // Touch Events
+    // Prevent default behavior
+    function preventDefaultBehavior(e) {
+        e.preventDefault();
+    }
+
+    // Get position X
+    function getPositionX(event) {
+        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+    }
+
+    // Animation
+    function animation() {
+        setSliderPosition();
+        if (isDragging) requestAnimationFrame(animation);
+    }
+
+    // Set slider position
+    function setSliderPosition() {
+        track.style.transform = `translateX(${currentTranslate}px)`;
+    }
+
+    // Get slide width including gap
+    function getSlideWidth() {
+        const slide = slides[0];
+        const style = window.getComputedStyle(slide);
+        const width = slide.offsetWidth;
+        const gap = parseInt(style.marginRight) || 20; // Default gap of 20px
+        return width + gap;
+    }
+
+    // Snap to closest slide
+    function snapToClosestSlide() {
+        const slideWidth = getSlideWidth();
+        const maxSlides = slides.length - 1;
+        const maxTranslate = -maxSlides * slideWidth;
+        
+        // Calculate closest slide index
+        currentIndex = Math.round(-currentTranslate / slideWidth);
+        
+        // Ensure we don't go beyond bounds
+        if (currentIndex < 0) currentIndex = 0;
+        if (currentIndex > maxSlides) currentIndex = maxSlides;
+        
+        // Set final position
+        currentTranslate = -currentIndex * slideWidth;
+        prevTranslate = currentTranslate;
+        
+        // Animate to final position
+        track.style.transition = 'transform 0.3s ease-out';
+        setSliderPosition();
+        
+        // Remove transition after animation
+        setTimeout(() => {
+            track.style.transition = 'none';
+        }, 300);
+    }
+
+    // Touch events
     gallery.addEventListener('touchstart', (e) => {
-        isDown = true;
-        startX = e.touches[0].pageX - gallery.offsetLeft;
-        scrollLeft = track.scrollLeft;
-        walkX = 0;
-    });
-
-    gallery.addEventListener('touchend', () => {
-        isDown = false;
-        // Snap to nearest slide based on walkX
-        if (Math.abs(walkX) > 50) {
-            const direction = walkX > 0 ? -1 : 1;
-            const slideWidth = gallery.querySelector('.gallery-slide').offsetWidth + 20; // Including gap
-            track.style.transform = `translateX(${scrollLeft + (direction * slideWidth)}px)`;
-        }
+        isDragging = true;
+        startX = getPositionX(e);
+        
+        // Stop any existing momentum
+        cancelAnimationFrame(animationID);
+        
+        track.style.transition = 'none';
+        gallery.style.cursor = 'grabbing';
+        
+        // Prevent default touch behavior
+        gallery.addEventListener('touchmove', preventDefaultBehavior, { passive: false });
     });
 
     gallery.addEventListener('touchmove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.touches[0].pageX - gallery.offsetLeft;
-        walkX = (x - startX);
-        track.style.transform = `translateX(${scrollLeft + walkX}px)`;
+        if (!isDragging) return;
+        
+        const currentX = getPositionX(e);
+        const diff = currentX - startX;
+        currentTranslate = prevTranslate + diff;
+        
+        // Request animation frame for smooth movement
+        animationID = requestAnimationFrame(animation);
     });
 
-    // Mouse Events (for desktop)
+    gallery.addEventListener('touchend', () => {
+        isDragging = false;
+        cancelAnimationFrame(animationID);
+        
+        // Remove touch move event listener
+        gallery.removeEventListener('touchmove', preventDefaultBehavior);
+        
+        // Snap to closest slide
+        snapToClosestSlide();
+        
+        gallery.style.cursor = 'grab';
+    });
+
+    // Mouse events
     gallery.addEventListener('mousedown', (e) => {
-        isDown = true;
-        startX = e.pageX - gallery.offsetLeft;
-        scrollLeft = track.scrollLeft;
-        walkX = 0;
-    });
-
-    gallery.addEventListener('mouseleave', () => {
-        isDown = false;
-    });
-
-    gallery.addEventListener('mouseup', () => {
-        isDown = false;
+        isDragging = true;
+        startX = getPositionX(e);
+        
+        cancelAnimationFrame(animationID);
+        
+        track.style.transition = 'none';
+        gallery.style.cursor = 'grabbing';
+        
+        // Prevent default drag behavior
+        gallery.addEventListener('mousemove', preventDefaultBehavior, { passive: false });
     });
 
     gallery.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
+        if (!isDragging) return;
+        
+        const currentX = getPositionX(e);
+        const diff = currentX - startX;
+        currentTranslate = prevTranslate + diff;
+        
+        animationID = requestAnimationFrame(animation);
+    });
+
+    gallery.addEventListener('mouseup', () => {
+        isDragging = false;
+        cancelAnimationFrame(animationID);
+        
+        gallery.removeEventListener('mousemove', preventDefaultBehavior);
+        
+        snapToClosestSlide();
+        
+        gallery.style.cursor = 'grab';
+    });
+
+    gallery.addEventListener('mouseleave', () => {
+        if (isDragging) {
+            isDragging = false;
+            cancelAnimationFrame(animationID);
+            snapToClosestSlide();
+        }
+    });
+
+    // Prevent context menu
+    gallery.addEventListener('contextmenu', e => {
         e.preventDefault();
-        const x = e.pageX - gallery.offsetLeft;
-        walkX = (x - startX);
-        track.style.transform = `translateX(${scrollLeft + walkX}px)`;
+        e.stopPropagation();
+        return false;
     });
 });
+
+    //testimonial script
         document.addEventListener('DOMContentLoaded', function() {
     const slides = document.querySelectorAll('.testimonial-slide');
     const dots = document.querySelectorAll('.testimonial-dot');
