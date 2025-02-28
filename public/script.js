@@ -410,12 +410,12 @@ function initMobileMenu() {
             if (navRight.classList.contains('active')) {
                 header.classList.add('active');
                 header.classList.remove('transparent');
-                menuIcon.src = 'assets/images/dropdownclose.png';
+                menuIcon.src = '/assets/images/dropdownclose.png';
                 console.log('Menu terbuka, header harus active:', header.classList); // Debug
             } else {
                 header.classList.remove('active');
                 header.classList.add('transparent');
-                menuIcon.src = 'assets/images/dropdownopen.png';
+                menuIcon.src = '/assets/images/dropdownopen.png';
                 console.log('Menu tertutup, header harus transparent:', header.classList); // Debug
             }
         }
@@ -427,7 +427,7 @@ function initMobileMenu() {
             navRight.classList.remove('active');
             header.classList.remove('active');
             header.classList.add('transparent');
-            menuIcon.src = 'assets/images/dropdownopen.png'; // Kembali ke icon open
+            menuIcon.src = '/assets/images/dropdownopen.png'; // Kembali ke icon open
         }
     });
 
@@ -438,7 +438,7 @@ function initMobileMenu() {
             navRight.classList.remove('active');
             header.classList.remove('active');
             header.classList.add('transparent');
-            menuIcon.src = 'assets/images/dropdownopen.png'; // Kembali ke icon open
+            menuIcon.src = '/assets/images/dropdownopen.png'; // Kembali ke icon open
         });
     });
 }
