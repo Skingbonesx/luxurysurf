@@ -395,93 +395,54 @@ function initMobileMenu() {
 
     if (!mobileMenuIcon || !navRight || !menuIcon || !header) return;
 
-    // Check if we're on mobile
+    // Cek mode mobile
     const isMobile = window.innerWidth <= 768;
     
     if (isMobile) {
-        // Set initial state for mobile - transparent header
-        header.classList.add('transparent');
+        header.classList.add('transparent'); // Set header transparan saat pertama kali load
     }
 
     mobileMenuIcon.addEventListener('click', function(e) {
         e.stopPropagation();
         navRight.classList.toggle('active');
-        
-        // Toggle header background when menu is active
+    
         if (isMobile) {
             if (navRight.classList.contains('active')) {
+                header.classList.add('active');
                 header.classList.remove('transparent');
+                menuIcon.src = 'assets/images/dropdownclose.png';
+                console.log('Menu terbuka, header harus active:', header.classList); // Debug
             } else {
+                header.classList.remove('active');
                 header.classList.add('transparent');
+                menuIcon.src = 'assets/images/dropdownopen.png';
+                console.log('Menu tertutup, header harus transparent:', header.classList); // Debug
             }
-        }
-        
-        // Toggle menu icon
-        if (navRight.classList.contains('active')) {
-            menuIcon.src = 'assets/images/dropdownclose.png';
-        } else {
-            menuIcon.src = 'assets/images/dropdownopen.png';
         }
     });
 
-    // Close menu when clicking outside
+    // Tutup menu jika klik di luar
     document.addEventListener('click', function(e) {
         if (!navRight.contains(e.target) && !mobileMenuIcon.contains(e.target)) {
             navRight.classList.remove('active');
-            menuIcon.src = 'assets/images/dropdownopen.png';
-            
-            // Restore transparent header on mobile
-            if (isMobile) {
-                header.classList.add('transparent');
-            }
+            header.classList.remove('active');
+            header.classList.add('transparent');
+            menuIcon.src = 'assets/images/dropdownopen.png'; // Kembali ke icon open
         }
     });
 
-    // Close menu when clicking a nav link
+    // Tutup menu jika klik salah satu link
     const navLinks = document.querySelectorAll('.nav-links a');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
             navRight.classList.remove('active');
-            menuIcon.src = 'assets/images/dropdownopen.png';
-            
-            // Restore transparent header on mobile
-            if (isMobile) {
-                header.classList.add('transparent');
-            }
+            header.classList.remove('active');
+            header.classList.add('transparent');
+            menuIcon.src = 'assets/images/dropdownopen.png'; // Kembali ke icon open
         });
     });
-    
-    // Handle scroll behavior for header
-    window.addEventListener('scroll', function() {
-        // Only apply this behavior on mobile when menu is not active
-        if (isMobile && !navRight.classList.contains('active')) {
-            if (window.scrollY > 50) {
-                // When scrolled, show header background
-                header.classList.remove('transparent');
-            } else {
-                // At top, keep header transparent
-                header.classList.add('transparent');
-            }
-        }
-    });
-    
-    // Handle window resize
-    window.addEventListener('resize', function() {
-        const newIsMobile = window.innerWidth <= 768;
-        
-        // If switching between mobile and desktop
-        if (newIsMobile !== isMobile) {
-            if (newIsMobile) {
-                // Switched to mobile
-                header.classList.add('transparent');
-            } else {
-                // Switched to desktop
-                header.classList.remove('transparent');
-                navRight.classList.remove('active');
-            }
-        }
-    });
 }
+
 
 /**
  * Social Menu Toggle
